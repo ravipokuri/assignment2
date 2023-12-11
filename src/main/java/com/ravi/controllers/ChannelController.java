@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.ravi.entities.Channel;
 import com.ravi.services.ChannelService;
+
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Set;
 
@@ -34,7 +37,7 @@ public class ChannelController {
     }
     @GetMapping("/{id}")
     @RolesAllowed({"ADMIN"})
-    public ResponseEntity<Set<SubChannel>> getChannelDetails(@PathVariable Integer id) {
+    public ResponseEntity<Set<SubChannel>> getChannelDetails(@PathVariable @Valid Integer id) {
         Channel channel = channelService.getChannelAndSubChannelDetails(id);
 
         if (channel != null) {

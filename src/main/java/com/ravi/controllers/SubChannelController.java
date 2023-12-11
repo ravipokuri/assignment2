@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.ravi.entities.SubChannel;
 import com.ravi.services.SubChannelService;
+
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Set;
 
@@ -38,7 +40,7 @@ public class SubChannelController {
 
     @GetMapping("/{id}")
     @RolesAllowed({"ADMIN"})
-    public ResponseEntity<Set<Channel>> getChannelDetails(@PathVariable Integer id) {
+    public ResponseEntity<Set<Channel>> getChannelDetails(@PathVariable @Valid Integer id) {
         SubChannel subChannel = subChannelService.getChannelAndSubChannelDetails(id);
 
         if (subChannel != null) {
