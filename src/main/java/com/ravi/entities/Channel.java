@@ -15,7 +15,7 @@ public class Channel {
     @Column(name="channel_id")
     private Integer channelID;
 
-    @Column(name="channel_name")
+    @Column(name="channel_name", columnDefinition = "VARCHAR(100)")
     private String channelName;
     @JsonIgnore
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})

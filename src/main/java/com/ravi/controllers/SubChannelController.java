@@ -4,11 +4,9 @@ import com.ravi.entities.Channel;
 import com.ravi.exception.ResourceNotFoundException;
 import jakarta.annotation.security.RolesAllowed;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.ravi.entities.SubChannel;
 import com.ravi.services.SubChannelService;
 
@@ -25,8 +23,8 @@ public class SubChannelController {
 
     @GetMapping
     @RolesAllowed({"ADMIN","VIEWER"})
-    public ResponseEntity<List<SubChannel>> getAllSubChannels() {
-
+    public ResponseEntity<?> getAllSubChannels() {
+        try{
             List<SubChannel> subChannels = subChannelService.getAllSubChannels();
 
             if (!subChannels.isEmpty()) {
@@ -34,20 +32,44 @@ public class SubChannelController {
             } else {
                 throw new ResourceNotFoundException("No SubChannels found");
             }
+        }catch (Exception e) {
+            String errorMessage = "An error occurred while processing the request: " + e.getMessage();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
+        }
+
 
 
     }
 
     @GetMapping("/{id}")
     @RolesAllowed({"ADMIN"})
-    public ResponseEntity<Set<Channel>> getChannelDetails(@PathVariable @Valid Integer id) {
-        SubChannel subChannel = subChannelService.getChannelAndSubChannelDetails(id);
+    public ResponseEntity<?> getChannelDetails(@PathVariable @Valid Integer id) {
+        try{
+            SubChannel subChannel = subChannelService.getChannelAndSubChannelDetails(id);
 
-        if (subChannel != null) {
-            return ResponseEntity.ok(subChannel.getChannels());
-        } else {
-            throw new ResourceNotFoundException("SubChannel not found with ID: " + id);
+            if (subChannel != null) {
+                return ResponseEntity.ok(subChannel.getChannels());
+            } else {
+                throw new ResourceNotFoundException("SubChannel not found with ID: " + id);
+            }
+        }catch (Exception e) {
+            String errorMessage = "An error occurred while processing the request: " + e.getMessage();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
         }
+
+    }
+
+    @PostMapping("/add/sunChannel")
+    @RolesAllowed({"ADMIN"})
+    public ResponseEntity<String> addChannel(@RequestBody SubChannel subChannel) {
+        try{
+            subChannelService.addSubChannel(subChannel);
+            return new ResponseEntity<>("SubChannel added successfully", HttpStatus.CREATED);
+        }catch (Exception e) {
+            String errorMessage = "An error occurred while processing the request: " + e.getMessage();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorMessage);
+        }
+
     }
 }
 

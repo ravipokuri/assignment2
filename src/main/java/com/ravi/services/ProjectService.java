@@ -6,4 +6,6 @@ import com.ravi.entities.Project;
 public interface ProjectService {
     Project insertProject(ProjectDto projectDto);
     List<Project> getProjectsByChannelAndSubChannel(String channelName, String subChannelName);
+
+    List<Project> searchProjectsByKeyword(String keyword);
 }

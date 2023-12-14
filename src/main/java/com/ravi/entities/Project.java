@@ -13,7 +13,7 @@ public class Project {
     @Column(name="project_id")
     private Integer projectId;
 
-    @Column(name="project_name")
+    @Column(name="project_name", columnDefinition = "VARCHAR(50)")
     private String projectName;
     @Column(name="project_creation_time")
     private LocalDateTime projectCreationTime;

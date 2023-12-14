@@ -1,6 +1,9 @@
 package com.ravi.services;
 import com.ravi.entities.SubChannel;
+import com.ravi.exception.CustomIllegalArgumentException;
+import com.ravi.exception.InvalidRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import com.ravi.entities.Channel;
 import com.ravi.repositories.ChannelRepository;
@@ -16,6 +19,15 @@ public class ChannelServiceImpl implements ChannelService {
     @Override
     public List<Channel> getAllChannels() {
         return channelRepository.findAll();
+    }
+
+    @Override
+    public void addChannel(Channel channel) {
+        try {
+            channelRepository.save(channel);
+        } catch (DataIntegrityViolationException e) {
+            throw new CustomIllegalArgumentException("Channel Name should contain maximum of 100 characters");
+        }
     }
 
     @Override

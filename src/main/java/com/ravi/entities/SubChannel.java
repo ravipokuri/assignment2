@@ -14,7 +14,7 @@ public class SubChannel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="sub_channel_id")
     private Integer subChannelID;
-    @Column(name="sub_channel_name")
+    @Column(name="sub_channel_name", columnDefinition = "VARCHAR(100)")
     private String subChannelName;
     @JsonIgnore
     @ManyToMany(mappedBy = "subChannels")

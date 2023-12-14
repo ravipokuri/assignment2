@@ -1,7 +1,9 @@
 package com.ravi.services;
 
 import com.ravi.entities.Channel;
+import com.ravi.exception.CustomIllegalArgumentException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import com.ravi.entities.SubChannel;
 import com.ravi.repositories.SubChannelRepository;
@@ -16,6 +18,15 @@ public class SubChannelServiceImpl implements SubChannelService {
     @Override
     public List<SubChannel> getAllSubChannels() {
         return subChannelRepository.findAll();
+    }
+
+    @Override
+    public void addSubChannel(SubChannel subChannel) {
+        try {
+            subChannelRepository.save(subChannel);
+        } catch (DataIntegrityViolationException e) {
+            throw new CustomIllegalArgumentException("SubChannel Name should contain maximum of 100 characters");
+        }
     }
 
     @Override
