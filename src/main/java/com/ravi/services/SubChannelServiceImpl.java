@@ -22,11 +22,14 @@ public class SubChannelServiceImpl implements SubChannelService {
 
     @Override
     public void addSubChannel(SubChannel subChannel) {
-        try {
-            subChannelRepository.save(subChannel);
-        } catch (DataIntegrityViolationException e) {
-            throw new CustomIllegalArgumentException("SubChannel Name should contain maximum of 100 characters");
+        if (subChannel.getSubChannelName() == null || subChannel.getSubChannelName().equals("")) {
+                throw new CustomIllegalArgumentException("SubChannel Name must be a non-null non-empty String");
         }
+        if (subChannel.getSubChannelName().length() > 100) {
+            throw new CustomIllegalArgumentException("SubChannel Name should contain a maximum of 100 characters");
+        }
+        subChannelRepository.save(subChannel);
+
     }
 
     @Override

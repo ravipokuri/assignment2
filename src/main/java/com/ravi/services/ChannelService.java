@@ -5,4 +5,6 @@ public interface ChannelService {
     List<Channel> getAllChannels();
     void addChannel(Channel channel);
     Channel getChannelAndSubChannelDetails(Integer channel_id);
+
+    void mapChannelToSubChannel(Integer channelId, Integer subChannelId);
 }

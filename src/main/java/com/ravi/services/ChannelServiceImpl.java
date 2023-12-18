@@ -2,6 +2,7 @@ package com.ravi.services;
 import com.ravi.entities.SubChannel;
 import com.ravi.exception.CustomIllegalArgumentException;
 import com.ravi.exception.InvalidRequestException;
+import com.ravi.repositories.SubChannelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,8 @@ import java.util.Set;
 public class ChannelServiceImpl implements ChannelService {
     @Autowired
     private ChannelRepository channelRepository;
+    @Autowired
+    private SubChannelRepository subChannelRepository;
 
     @Override
     public List<Channel> getAllChannels() {
@@ -23,11 +26,14 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public void addChannel(Channel channel) {
-        try {
-            channelRepository.save(channel);
-        } catch (DataIntegrityViolationException e) {
-            throw new CustomIllegalArgumentException("Channel Name should contain maximum of 100 characters");
+        if (channel.getChannelName() == null || channel.getChannelName().equals("") ) {
+            throw new CustomIllegalArgumentException("Channel Name must be a non-null non-empty String");
         }
+        if (channel.getChannelName().length() > 100) {
+            throw new CustomIllegalArgumentException("Channel Name should contain a maximum of 100 characters");
+        }
+        channelRepository.save(channel);
+
     }
 
     @Override
@@ -39,6 +45,19 @@ public class ChannelServiceImpl implements ChannelService {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public void mapChannelToSubChannel(Integer channelId, Integer subChannelId) {
+        Channel channel = channelRepository.findById(channelId).orElse(null);
+        SubChannel subChannel = subChannelRepository.findById(subChannelId).orElse(null);
+
+        if (channel == null || subChannel == null) {
+            throw new InvalidRequestException("Channel and SubChannel must exist");
+        }
+
+        channel.getSubChannels().add(subChannel);
+        channelRepository.save(channel);
     }
 
 

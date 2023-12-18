@@ -1,7 +1,9 @@
 package com.ravi.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.ravi.exception.CustomIllegalArgumentException;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -14,6 +16,8 @@ public class Channel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="channel_id")
     private Integer channelID;
+
+
 
     @Column(name="channel_name", columnDefinition = "VARCHAR(100)")
     private String channelName;
