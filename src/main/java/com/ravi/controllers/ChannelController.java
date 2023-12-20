@@ -1,5 +1,6 @@
 package com.ravi.controllers;
 
+import com.ravi.dto.ChannelDto;
 import com.ravi.entities.SubChannel;
 import com.ravi.exception.ResourceNotFoundException;
 import jakarta.annotation.security.RolesAllowed;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import com.ravi.entities.Channel;
 import com.ravi.services.ChannelService;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Set;
 
@@ -59,9 +60,9 @@ public class ChannelController {
 
     @PostMapping("/add/channel")
     @RolesAllowed({"ADMIN"})
-    public ResponseEntity<String> addChannel(@RequestBody Channel channel) {
+    public ResponseEntity<String> addChannel(@RequestBody @Valid ChannelDto channelDto) {
         try {
-            channelService.addChannel(channel);
+            channelService.addChannel(channelDto);
             return new ResponseEntity<>("Channel added successfully", HttpStatus.CREATED);
         }catch (Exception e) {
             String errorMessage = "An error occurred while processing the request: " + e.getMessage();

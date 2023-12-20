@@ -1,15 +1,17 @@
 package com.ravi.services;
+
+import com.ravi.dto.ChannelDto;
 import com.ravi.entities.SubChannel;
-import com.ravi.exception.CustomIllegalArgumentException;
 import com.ravi.exception.InvalidRequestException;
 import com.ravi.repositories.SubChannelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import com.ravi.entities.Channel;
 import com.ravi.repositories.ChannelRepository;
+
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -25,15 +27,10 @@ public class ChannelServiceImpl implements ChannelService {
     }
 
     @Override
-    public void addChannel(Channel channel) {
-        if (channel.getChannelName() == null || channel.getChannelName().equals("") ) {
-            throw new CustomIllegalArgumentException("Channel Name must be a non-null non-empty String");
-        }
-        if (channel.getChannelName().length() > 100) {
-            throw new CustomIllegalArgumentException("Channel Name should contain a maximum of 100 characters");
-        }
-        channelRepository.save(channel);
-
+    public Object addChannel(ChannelDto channelDto) {
+        Channel channel=new Channel();
+        channel.setChannelName(channelDto.getChannelName());
+        return channelRepository.save(channel);
     }
 
     @Override

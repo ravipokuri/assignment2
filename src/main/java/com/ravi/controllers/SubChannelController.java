@@ -1,5 +1,6 @@
 package com.ravi.controllers;
 
+import com.ravi.dto.SubChannelDto;
 import com.ravi.entities.Channel;
 import com.ravi.exception.ResourceNotFoundException;
 import jakarta.annotation.security.RolesAllowed;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import com.ravi.entities.SubChannel;
 import com.ravi.services.SubChannelService;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Set;
 
@@ -61,9 +62,9 @@ public class SubChannelController {
 
     @PostMapping("/add/sunChannel")
     @RolesAllowed({"ADMIN"})
-    public ResponseEntity<String> addChannel(@RequestBody SubChannel subChannel) {
+    public ResponseEntity<String> addChannel(@RequestBody @Valid SubChannelDto subChannelDto) {
         try{
-            subChannelService.addSubChannel(subChannel);
+            subChannelService.addSubChannel(subChannelDto);
             return new ResponseEntity<>("SubChannel added successfully", HttpStatus.CREATED);
         }catch (Exception e) {
             String errorMessage = "An error occurred while processing the request: " + e.getMessage();

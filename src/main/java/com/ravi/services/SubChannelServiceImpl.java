@@ -1,5 +1,6 @@
 package com.ravi.services;
 
+import com.ravi.dto.SubChannelDto;
 import com.ravi.entities.Channel;
 import com.ravi.exception.CustomIllegalArgumentException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +22,9 @@ public class SubChannelServiceImpl implements SubChannelService {
     }
 
     @Override
-    public void addSubChannel(SubChannel subChannel) {
-        if (subChannel.getSubChannelName() == null || subChannel.getSubChannelName().equals("")) {
-                throw new CustomIllegalArgumentException("SubChannel Name must be a non-null non-empty String");
-        }
-        if (subChannel.getSubChannelName().length() > 100) {
-            throw new CustomIllegalArgumentException("SubChannel Name should contain a maximum of 100 characters");
-        }
+    public void addSubChannel(SubChannelDto subChannelDto) {
+        SubChannel subChannel=new SubChannel();
+        subChannel.setSubChannelName(subChannelDto.getSubChannelName());
         subChannelRepository.save(subChannel);
 
     }

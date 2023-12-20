@@ -10,10 +10,16 @@ import com.ravi.repositories.ChannelRepository;
 import com.ravi.repositories.SubChannelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import com.ravi.entities.Project;
 import com.ravi.repositories.ProjectRepository;
 import java.util.List;
+import com.ravi.entities.ProjectSpecifications;
+
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
@@ -81,14 +87,16 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<Project> searchProjectsByKeyword(String keyword) {
-        List<Project> projects= projectRepository.searchByKeyword(keyword);
-        if(projects.isEmpty()) {
-            throw new ResourceNotFoundException("No projects found");
+    public Page<Project> searchProjectsByKeyword(String keyword, int page, int size) {
+        Specification<Project> spec = ProjectSpecifications.searchByKeyword(keyword);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Project> projects = projectRepository.findAll(spec, pageable);
+
+        if (projects.isEmpty()) {
+            throw new ResourceNotFoundException("No projects found for the specified page and size.");
         }
-        else {
-            return projects;
-        }
+
+        return projects;
     }
 
 
